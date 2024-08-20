@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+    <div class='form-modal__container'>
+        <div class='form-modal__wrapper' >
+            <div class='sign-up'>
+                <img src='https://png.pngtree.com/thumb_back/fw800/background/20220424/pngtree-web-template-of-computer-login-form-page-application-username-photo-image_30648922.jpg' alt='Camels in the desert'>
+            </div>
+            <div class='sign-up__container'>
+                <h2>Sign Up</h2>
+                <form class='sign-up__form'>
+                    <label>Username</label> <br>
+                    <input type='text' id='username' placeholder='...'><br> <!-- Add id to retrieve value -->
+                    <label>Password</label> <br>
+                    <input type='password' id='password' placeholder='password'><br> <!-- Add id to retrieve value -->
+                    <button type='button' class='btn-sign' id='submitBtn'>Sign Up</button> <!-- Change type to button to prevent form submission -->
+                </form>
+                <div>
+                    <p class='have-account'>Have an account? <span>Log In here </span></p>
+                </div>
+            </div>
+        </div>=
+    </div>
+
+    <script>
+         $(document).ready(function(){
+            $('#submitBtn').click(function(){
+                var username = $('#username').val();
+                var password = $('#password').val();
+
+                // Send data to server using AJAX
+                $.ajax({
+                    url: '/login',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        username: username,
+                        password: password
+                    }),
+                    success: function(response){
+                        console.log('Data sent successfully');
+                        
+                        localStorage.setItem('accessToken', response.accessToken);
+
+                        var decodedToken = jwt_decode(response.accessToken);
+                        console.log('Decoded Token:', decodedToken);
+                        
+                        if(decodedToken && decodedToken.username && decodedToken.isAdmin === 0) {
+                            window.location.href = '/homepage';
+                        } else if(decodedToken && decodedToken.username && decodedToken.isAdmin === 1){
+                            window.location.href = '/admin';
+                        } else {
+                            console.error('Failed to decode token or username not found.');
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        console.error('Error:', error);
+                        if(xhr.status === 401){
+                            if(xhr.responseText === 'Username does not exist'){
+                                alert('Username does not exist');
+                            } else if(xhr.responseText === 'Incorrect password'){
+                                alert('Incorrect password');
+                            }
+                        } else if(xhr.status === 500){
+                            alert('Internal Server Error');
+                        } else {
+                            alert('An unknown error occurred');
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>
+
+<style>
+    /*Sign up Page*/
+    .form-modal__container {
+        margin: 0 0.5rem;
+    }
+    .form-modal__wrapper {
+        display: flex;
+        justify-content: center;
+        max-width: 900px;
+        height: 500px;
+        margin: 4rem auto;
+    }
+    .sign-up {
+        overflow: hidden;
+        width: 400px;
+        height: inherit;
+        border-radius: 10px 0 0 10px;
+    }
+    .sign-up > img {
+        width: 100%; 
+        height: 100%;
+        object-fit: cover; 
+        display: block;
+    }
+    .sign-up__container {
+        background: #fff;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        width: 500px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+        border-radius: 0 10px 10px 0;
+        justify-content: center;
+    }
+    .sign-up__container > h2 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        margin-top: 3rem;
+    }
+    .sign-up__form {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+    }
+    .sign-up__form > label {
+        font-size: 1.2rem;
+        margin-bottom: 0.1rem;
+    }
+    .sign-up__form > input {
+        margin-bottom: 1rem;
+        padding: 0.6rem;
+    }
+    .sign-up__form .btn-sign {
+        padding: 12px 26px;
+        width: fit-content;
+        margin: 1.5rem auto 0;
+        border-radius: 2px;
+        font-size: 20px;
+        border: 1px solid #242424;
+        background-color: #242424;
+        color: #fff;
+        cursor: pointer;
+    }
+    .sign-up__form .btn-sign:hover {
+        color: #242424;
+        background-color: #fff;
+    }
+    .have-account {
+        font-size: 0.9rem;
+        color: #5a5a5a;
+    }
+    .have-account span {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    @media only screen and (max-width: 798px) {
+        .destination-container h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+</style>

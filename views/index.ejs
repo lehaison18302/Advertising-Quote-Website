@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    
+</head>
+<body>
+    <div class="button-container">
+        <button id="user-management">Quản lý User</button>
+    </div>
+
+    <table>
+        <tr>
+            <td colspan="6"></td>
+            <td colspan="2" style="background-color: #073763; color: #fff; text-align: center;" > Đơn giá (VNĐ)</td>
+            <td colspan="2"> 
+                <form id="search">
+                    <input type="text" id="search-input" placeholder="Nhập từ khóa...">
+                    <button id="search-button">Tìm kiếm</button>
+                </form>
+            </td>
+            <td colspan="1" style="background-color: #073763; color:#073763; text-align: center;">
+                <button id="add" style="color: #ffffff; background-color: #073763;">Thêm</button>
+            </td>
+        </tr>
+
+        <tr style="background-color: #073763; color: #fff;">
+            <th style="width: 2%;">STT</th>
+            <th style="width: 2%;">Website</th>
+            <th style="width: 10%;">Tên vị trí</th>
+            <th style="width: 31%;">Kích thước (px)</th>
+            <th style="width: 5%;">Nền tảng</th>
+            <th style="width: 9%;">Demo</th>
+            <th style="width: 10%;">Cách tính giá</th>
+            <th style="width: 8%;">Trang chủ</th>
+            <th style="width: 8%;">Roadblock xuyên site<br>(Độc quyền ngày)</th>
+            <th style="width: 8%;">CTR trung bình (%)</th>
+            <th style="width: 3%;">Est. Traffic/ tuần /slot</th>
+            <th style="width: 3%;">Option</th>
+        </tr>
+        <% for(let j=1; j < 8 ; j++) { %>
+            <tr class="head">
+                <td colspan="12" style="background-color: rgb(169, 25, 25); text-align: center; border: 1px solid #000;height: 30px; color: #fff;"><%= name[j] %></td>
+            </tr>
+    
+            <% for(let i = 0 ; i < (results.length ) ; i++) { %>
+                <% if(results[i].stt === j){ %>
+                    <tr class="tbody">
+                        <td><%= results[i].stt %></td>
+                        <td><%= results[i].website %></td>
+                        <td><%= results[i].position %></td>
+                        <td><%= results[i].dimension %></td>
+                        <td><%= results[i].platform %></td>
+                        <td><%= results[i].demo %></td>
+                        <td><%= results[i].buying_method %></td>
+                        <td><%= results[i].homepage %></td>
+                        <td><%= results[i].cross_site %></td>
+                        <td><%= results[i].ctr %></td>
+                        <td><%= results[i].estTraffic %></td>
+                        <td class="td-icons">
+                            <button class="delete" data-idd="<%= results[i].id %>">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="fix" data-idd="<%= results[i].id %>">
+                                <i class="fas fa-edit"></i>
+                            </button>                            
+                        </td>
+                    </tr>
+                <% } %>
+            <%}%>  
+        <%}%>
+
+        <% for(let j=7; j <= 12 ; j++) { %>
+            <tr class="head">
+                <td colspan="12" style=" background-color: rgb(211, 129, 129); text-align: center; border: 1px solid #000;height: 30px; color: #fff;"><%= name[j] %></td>
+            </tr>
+            <% if(j == 7) {%>
+                <tr style="background-color: #073763; color: #fff;">
+                    <th style="width: 2%;">STT</th>
+                    <th style="width: 2%;">Website</th>
+                    <th style="width: 10%;">Tên vị trí</th>
+                    <th style="width: 31%;">Kích thước (px)</th>
+                    <th style="width: 5%;">Nền tảng</th>
+                    <th style="width: 9%;">Demo</th>
+                    <th style="width: 10%;">Cách tính giá</th>
+                    <th style="width: 8%;">Đơn giá</th>
+                    <th style="width: 8%;">CTR trung bình (%)</th>
+                    <th style="width: 3%;">Est.Impression</th>
+                    <th style="width: 3%;">Note</th>
+                    <th style="width: 3%;">Option</th>
+                </tr>
+            <% } %>
+            <% for(let i = 0 ; i < (results.length ) ; i++) { %>
+                <% if(results[i].stt === j){ %>
+                    <tr class="tbody">
+                        <td><%= results[i].stt %></td>
+                        <td><%= results[i].website %></td>
+                        <td><%= results[i].position %></td>
+                        <td><%= results[i].dimension %></td>
+                        <td><%= results[i].platform %></td>
+                        <td><%= results[i].demo %></td>
+                        <td><%= results[i].buying_method %></td>
+                        <td><%= results[i].homepage %></td>
+                        <td><%= results[i].cross_site %></td>
+                        <td><%= results[i].ctr %></td>
+                        <td><%= results[i].estTraffic %></td>
+                        <td class="td-icons">
+                            <button class="delete" data-idd="<%= results[i].id %>">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="fix" data-idd="<%= results[i].id %>">
+                                <i class="fas fa-edit"></i>
+                            </button>                            
+                        </td>
+                    </tr>
+                <% } %>
+            <%}%> 
+        <%}%> 
+
+
+        <% for(let j=13; j <= 17 ; j++) { %>
+            <tr class="head">
+                <td colspan="12" style=" background-color: rgb(62, 106, 230); text-align: center; border: 1px solid #000;height: 30px; color: #fff;"><%= name[j] %></td>
+            </tr>
+            <% if(j == 13) {%>
+                <tr style="background-color: #073763; color: #fff;">
+                    <th style="width: 2%;">STT</th>
+                    <th style="width: 2%;">Website</th>
+                    <th style="width: 10%;">Tên vị trí</th>
+                    <th style="width: 31%;">Kích thước (px)</th>
+                    <th style="width: 5%;">Nền tảng</th>
+                    <th style="width: 9%;">Demo</th>
+                    <th style="width: 10%;">Tuần</th>
+                    <th style="width: 8%;">Tháng</th>
+                    <th style="width: 8%;">Quý</th>
+                    <th style="width: 3%;">Est.CTR</th>
+                    <th style="width: 3%;">Est.traffic</th>
+                    <th style="width: 3%;">Option</th>
+                </tr>
+            <% } %>
+            <% for(let i = 0 ; i < (results.length ) ; i++) { %>
+                <% if(results[i].stt === j){ %>
+                    <tr class="tbody">
+                        <td><%= results[i].stt %></td>
+                        <td><%= results[i].website %></td>
+                        <td><%= results[i].position %></td>
+                        <td><%= results[i].dimension %></td>
+                        <td><%= results[i].platform %></td>
+                        <td><%= results[i].demo %></td>
+                        <td><%= results[i].buying_method %></td>
+                        <td><%= results[i].homepage %></td>
+                        <td><%= results[i].cross_site %></td>
+                        <td><%= results[i].ctr %></td>
+                        <td><%= results[i].estTraffic %></td>
+                        <td class="td-icons">
+                            <button class="delete" data-idd="<%= results[i].id %>">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="fix" data-idd="<%= results[i].id %>">
+                                <i class="fas fa-edit"></i>
+                            </button>                            
+                        </td>
+                    </tr>
+                <% } %>
+            <%}%> 
+        <%}%> 
+    </table>
+
+    <script>
+
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            console.error('No token found in localStorage');
+        }
+        // search
+        $(document).ready(function() {
+            $('#search-button').click(function(event) {
+                event.preventDefault(); 
+
+                var searchValue = $('#search-input').val().trim();
+                console.log("Original searchValue: " + searchValue);
+
+                // Chuẩn hóa searchValue chỉ khi nó là một chuỗi số
+                if (/^\d+$/.test(searchValue)) {
+                    searchValue = formatNumberWithCommas(searchValue);
+                }
+                console.log("Formatted searchValue: " + searchValue);
+
+                window.location.href = "/search/" + searchValue;
+            });
+
+            // Hàm thêm dấu phẩy vào chuỗi số
+            function formatNumberWithCommas(numberString) {
+                var reversedArray = numberString.split('').reverse();
+                var resultArray = [];
+
+                for (var i = 0; i < reversedArray.length; i++) {
+                    if (i > 0 && i % 3 === 0) {
+                        resultArray.push(',');
+                    }
+                    resultArray.push(reversedArray[i]);
+                }
+
+                return resultArray.reverse().join('');
+            }
+        });
+
+        // Delete
+        $(document).ready(function() {
+            $(".delete").click(function() {
+                var id = $(this).data("idd");
+                var $row = $(this).closest("tr"); // Lưu trữ hàng trong một biến để xóa sau khi yêu cầu thành công
+                const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+                console.log('Token from localStorage:', token); // Kiểm tra token
+
+
+                var confirmation = confirm("Bạn có chắc chắn muốn xóa");
+                if(confirmation){
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/delete/" + id, 
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        success: function(response) {
+                            // Sử dụng biến $row để xóa hàng từ DOM sau khi yêu cầu xóa thành công
+                            $row.remove();
+                        },
+                        error: function(error) {
+                            console.error('Lỗi:', error);
+                            alert('Đã xảy ra lỗi khi xóa dòng. Vui lòng thử lại sau.');
+                        }
+                    });
+                    alert('Xóa thành công');
+                }
+            });
+        });
+
+        // fix
+        $(document).ready(function() {
+            $(".fix").click(function() {
+                var id = $(this).data("idd");
+                const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+                
+                $.ajax({
+                        type: "GET",
+                        url: "/fix", 
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                });
+                window.location.href = "/fix/" + id;
+            });
+        });
+
+        //add
+        $(document).ready(function() {
+            $("#add").click(function() {
+                const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+                console.log('Token from localStorage:', token); // Kiểm tra token
+
+                $.ajax({
+                    type: "GET",
+                    url: "/validate-token",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    success: function(response) {
+                        // Nếu xác thực thành công, chuyển hướng đến /add để render form
+                        if (response.success) {
+                            window.location.href = "/add";
+                        } else {
+                            console.error('Error:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Xảy ra lỗi: ' + error);
+                    }
+                });
+            });
+        });
+
+
+
+        // user
+        $(document).ready(function(){
+            $("#user-management").click(function(event){
+                event.preventDefault(); // Ngăn chặn hành động mặc định của nút
+                const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+                console.log('Token from localStorage:', token); // Kiểm tra token
+
+                $.ajax({
+                    type: "GET", // Thêm method cho request
+                    url: "/check-admin",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    success: function(response) {
+                        // Điều hướng tới trang quản lý user sau khi nhận được phản hồi thành công từ server
+                        window.location.href = "/user";
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Xử lý lỗi nếu cần
+                        console.error('Error fetching user management page:', textStatus, errorThrown);
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

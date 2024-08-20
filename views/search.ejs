@@ -1,0 +1,44 @@
+<!-- search.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+    <table id="search-results" style="border: 2px solid#000;">
+        <tr style="background-color: #073763; color: #fff;">
+            <th style="width: 2%;">STT</th>
+            <th style="width: 3%;">Website</th>
+            <th style="width: 10%;">Tên vị trí</th>
+            <th style="width: 32%;">Kích thước (px)</th>
+            <th style="width: 5%;">Nền tảng</th>
+            <th style="width: 9%;">Demo</th>
+            <th style="width: 10%;">Cách tính giá</th>
+            <th style="width: 9%;">Trang chủ</th>
+            <th style="width: 8%;">Roadblock xuyên site<br>(Độc quyền ngày)</th>
+            <th style="width: 8%;">CTR trung bình (%)</th>
+            <th style="width: 3%;">Est. Traffic/ tuần /slot</th>
+        </tr>
+        
+        <% for(let i = 0; i < (filteredResults.length) ; i++ ){ %>
+            <tr>
+                <td><%= filteredResults[i].stt %></td>
+                <td><%= filteredResults[i].website %></td>
+                <td><%= filteredResults[i].position %></td>
+                <td><%= filteredResults[i].dimension %></td>
+                <td><%= filteredResults[i].platform %></td>
+                <td><%= filteredResults[i].demo %></td>
+                <td><%= filteredResults[i].buying_method %></td>
+                <td><%= filteredResults[i].homepage %></td>
+                <td><%= filteredResults[i].cross_site %></td>
+                <td><%= filteredResults[i].ctr %></td>
+                <td><%= filteredResults[i].estTraffic %></td>
+            </tr>
+        <% } %>
+    </table>
+    
+</body>
+</html>

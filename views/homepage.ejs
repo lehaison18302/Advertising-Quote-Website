@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td colspan="7"></td>
+            <td colspan="2" style="background-color: #073763; color: #fff; text-align: center;" > Đơn giá (VNĐ)</td>
+            <td colspan="2"> 
+                <form id="search">
+                    <input type="text" id="search-input" placeholder="Nhập từ khóa...">
+                    <button id="search-button">Tìm kiếm</button>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </form>
+            </td>
+        </tr>
+
+        <tr style="background-color: #073763; color: #fff;">
+            <th style="width: 2%;">STT</th>
+            <th style="width: 2%;">Website</th>
+            <th style="width: 10%;">Tên vị trí</th>
+            <th style="width: 31%;">Kích thước (px)</th>
+            <th style="width: 5%;">Nền tảng</th>
+            <th style="width: 9%;">Demo</th>
+            <th style="width: 10%;">Cách tính giá</th>
+            <th style="width: 8%;">Trang chủ</th>
+            <th style="width: 8%;">Roadblock xuyên site<br>(Độc quyền ngày)</th>
+            <th style="width: 8%;">CTR trung bình (%)</th>
+            <th style="width: 3%;">Est. Traffic/ tuần /slot</th>
+            <th style="width: 3%;">Option</th>
+        </tr>
+        <% for(let j=1; j < 8 ; j++) { %>
+            <tr class="head">
+                <td colspan="12" style=" background-color: rgb(169, 25, 25); text-align: center; border: 1px solid #000;height: 30px; color: #fff;"><%= name[j] %></td>
+            </tr>
+    
+            <% for(let i = 0 ; i < (results.length ) ; i++) { %>
+                <% if(results[i].stt === j){ %>
+                    <tr class="tbody">
+                        <td><%= results[i].stt %></td>
+                        <td><%= results[i].website %></td>
+                        <td><%= results[i].position %></td>
+                        <td><%= results[i].dimension %></td>
+                        <td><%= results[i].platform %></td>
+                        <td><%= results[i].demo %></td>
+                        <td><%= results[i].buying_method %></td>
+                        <td><%= results[i].homepage %></td>
+                        <td><%= results[i].cross_site %></td>
+                        <td><%= results[i].ctr %></td>
+                        <td><%= results[i].estTraffic %></td>
+                    </tr>
+                <% } %>
+            <%}%>  
+        <%}%>
+        
+        <% for(let j=7; j <= 12 ; j++) { %>
+            <tr class="head">
+                <td colspan="11" style=" background-color: rgb(211, 129, 129); text-align: center; border: 1px solid #000;height: 30px; color: #fff;"><%= name[j] %></td>
+            </tr>
+            <% if(j == 7) {%>
+                <tr style="background-color: #073763; color: #fff;">
+                    <th style="width: 2%;">STT</th>
+                    <th style="width: 2%;">Website</th>
+                    <th style="width: 10%;">Tên vị trí</th>
+                    <th style="width: 31%;">Kích thước (px)</th>
+                    <th style="width: 5%;">Nền tảng</th>
+                    <th style="width: 9%;">Demo</th>
+                    <th style="width: 10%;">Cách tính giá</th>
+                    <th style="width: 8%;">Đơn giá</th>
+                    <th style="width: 8%;">CTR trung bình (%)</th>
+                    <th style="width: 3%;">Est.Impression</th>
+                    <th style="width: 3%;">Note</th>
+                </tr>
+            <% } %>
+            <% for(let i = 0 ; i < (results.length ) ; i++) { %>
+                <% if(results[i].stt === j){ %>
+                    <tr class="tbody">
+                        <td><%= results[i].stt %></td>
+                        <td><%= results[i].website %></td>
+                        <td><%= results[i].position %></td>
+                        <td><%= results[i].dimension %></td>
+                        <td><%= results[i].platform %></td>
+                        <td><%= results[i].demo %></td>
+                        <td><%= results[i].buying_method %></td>
+                        <td><%= results[i].homepage %></td>
+                        <td><%= results[i].cross_site %></td>
+                        <td><%= results[i].ctr %></td>
+                        <td><%= results[i].estTraffic %></td>
+                    </tr>
+                <% } %>
+            <%}%> 
+        <%}%> 
+    </table>
+
+    
+    <script>
+
+        // search
+
+        $(document).ready(function() {
+            $('#search-button').click(function(event) {
+                event.preventDefault(); 
+
+                var searchValue = $('#search-input').val().trim();
+                console.log("Original searchValue: " + searchValue);
+
+                // Chuẩn hóa searchValue chỉ khi nó là một chuỗi số
+                if (/^\d+$/.test(searchValue)) {
+                    searchValue = formatNumberWithCommas(searchValue);
+                }
+                console.log("Formatted searchValue: " + searchValue);
+
+                window.location.href = "/search/" + searchValue;
+            });
+            // Hàm thêm dấu phẩy vào chuỗi số
+            function formatNumberWithCommas(numberString) {
+                var reversedArray = numberString.split('').reverse();
+                var resultArray = [];
+
+                for (var i = 0; i < reversedArray.length; i++) {
+                    if (i > 0 && i % 3 === 0) {
+                        resultArray.push(',');
+                    }
+                    resultArray.push(reversedArray[i]);
+                }
+
+                return resultArray.reverse().join('');
+            }
+        });
+
+
+
+
+    </script>
+</body>
+</html>
+
+

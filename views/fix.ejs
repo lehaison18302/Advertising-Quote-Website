@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <form id="update">  
+        <table id="update-tb" style="border: 2px solid#000; ">
+            <tr style="background-color: #073763; color: #fff;border: 2px solid#000;">
+                <th style="width: 15%;">Website</th>
+                <th style="width: 10%;">Tên vị trí</th>
+                <th style="width: 31%;">Kích thước (px)</th>
+                <th style="width: 5%;">Nền tảng</th>
+                <th style="width: 5%;">Demo</th>
+                <th style="width: 10%;">Cách tính giá</th>
+                <th style="width: 8%;">Trang chủ</th>
+                <th style="width: 8%;">Roadblock xuyên site<br>(Độc quyền ngày)</th>
+                <th style="width: 8%;">CTR trung bình (%)</th>
+                <th style="width: 3%;">Est. Traffic/ tuần /slot</th>
+            </tr>
+            
+            <tr>
+                <td id="website">
+                    
+                </td>
+                <td>
+                    <input type="text" id="position" >
+                </td>
+                <td>
+                    <input type="text" id="dimension" >
+                </td>
+                <td>
+                    <input type="text" id="platform" >
+                </td>
+                <td>
+                    <input type="text" id="demo" >
+                </td>
+                <td>
+                    <input type="text" id="buying_method" >
+                </td>
+                <td>
+                    <input type="text" id="homepage" >
+                </td>
+                <td>
+                    <input type="text" id="cross_site" >
+                </td>
+                <td>
+                    <input type="text" id="ctr" >
+                </td>
+                <td>
+                    <input type="text" id="estTraffic" >
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="button" type="submit">Submit</button>
+                </td>
+                <td colspan="9"></td>
+            </tr>
+        </table>
+    </form>
+    <script>
+
+            $(document).ready(function() {
+            const id = window.location.pathname.split('/').pop();
+            const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+            console.log('Token from localStorage:', token); // Kiểm tra token
+
+            $.ajax({
+                    type: 'GET',
+                    url: '/fixdt/' + id,
+                    headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                    success: function(response){
+                        $('#stt').val(response.stt);
+                        $('#website').text(response.website);
+                        $('#position').val(response.position);
+                        $('#dimension').val(response.dimension);
+                        $('#platform').val(response.platform);
+                        $('#demo').val(response.demo);
+                        $('#buying_method').val(response.buying_method);
+                        $('#homepage').val(response.homepage);
+                        $('#cross_site').val(response.cross_site);
+                        $('#ctr').val(response.ctr);
+                        $('#estTraffic').val(response.estTraffic);
+                    }
+                });
+            });
+
+            // Bắt sự kiện submit của form
+            $('#update').submit(function(event) {
+                const id = window.location.pathname.split('/').pop();
+                console.log(id);
+                event.preventDefault();
+                
+                var confirmation = confirm("Bạn có chắc chắn muốn sửa ?");
+                if (confirmation) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/update/' + id,
+                        data: {
+                            id: id,
+                            website: $('#website').text(),
+                            position: $('#position').val(),
+                            dimension: $('#dimension').val(),
+                            platform: $('#platform').val(),
+                            demo: $('#demo').val(),
+                            buying_method: $('#buying_method').val(),
+                            homePage: $('#homepage').val(),
+                            cross_site: $('#cross_site').val(),
+                            ctr: $('#ctr').val(),
+                            estTraffic: $('#estTraffic').val()
+                        },
+
+                        success: function(response) {
+                            // Xử lý dữ liệu trả về từ API nếu cần
+                            alert('Dữ liệu đã được sửa thành công!');
+                            
+                            // Điều hướng về trang '/'
+                            window.location.href = '/admin'; 
+                        },
+                        error: function(xhr, status, error) {
+                            // Xử lý lỗi nếu có
+                            alert('Đã xảy ra lỗi: ' + error);
+                        }
+                    });
+                } else { }    
+            });
+        
+
+    </script>
+</body>
+</html>

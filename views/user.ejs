@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #quit {
+            background-color: #6e7681;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #quit:hover {
+            background-color: #8c9cbd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #6e7681;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #8c9cbd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Danh sách người dùng</h1>
+        <button id="quit">Quay về trang chủ</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>
+                    
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <% user.forEach(function(u) { %>
+                <tr>
+                    <td><%= u.username %></td>
+                    <td><%= u.email %></td>
+                    <td>
+                        <button class="delete" data-id="<%= u.id %>">Xóa</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <h2>Thêm mới người dùng</h2>
+    <form id="addUser">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <button type="submit">Thêm mới</button>
+    </form>
+
+    <script>
+        $(document).ready(function(){
+            $('#addUser').submit(function(event){
+                const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+                console.log('Token from localStorage:', token); // Kiểm tra token
+
+                event.preventDefault();
+                var email = $('#email').val();
+                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+                if (!emailPattern.test(email)) {
+                    alert("Vui lòng nhập một email hợp lệ.");
+                    return;
+                }
+
+                var confirmation = confirm("Bạn chắc chắn muốn thêm người dùng mới ?");
+                if(confirmation){
+                    $.ajax({
+                        type: 'POST',
+                        url: '/addUser',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        data: JSON.stringify({
+                            username: $('#username').val(),
+                            password: $('#password').val(),
+                            email: $('#email').val()
+                        }),
+
+                        success: function(response) {
+                            alert('Thêm thành công người dùng mới!');
+                            window.location.href = '/user';
+                        },
+                        error: function(xhr, status, error){
+                            alert('Xảy ra lỗi: ' + error);
+                        }
+                    });
+                }
+            });
+        });
+
+
+        $(document).ready(function(){
+            $("#quit").click(function(){
+                window.location.href = "/admin";
+            });
+        });
+
+        $(document).ready(function(){
+            $(".delete").click(function(){
+                var id = $(this).data("id");
+                var $row = $(this).closest("tr");
+
+                const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+                console.log('Token from localStorage:', token); // Kiểm tra token
+
+                if (!token) {
+                    console.error('No token found in localStorage');
+                    return;
+                }
+                var confirmation = confirm("Bạn chắc chắn muốn xóa người dùng này ?");
+                if(confirmation){
+                    $.ajax({
+                        type: "DELETE",
+                        url:"/deleteUser/" + id,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        success: function(response) {
+                            $row.remove();
+                        },
+                        error: function(error) {
+                            console.log('Lỗi:', error);
+                            alert('Đã xảy ra lỗi khi xóa người dùng!');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

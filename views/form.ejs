@@ -1,0 +1,168 @@
+<!-- Trang form.ejs -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <form id="data-form">  
+        <table id="tb-form" style="border: 2px solid#000;">
+            <tr style="background-color: #073763; color: #fff; border: 2px solid #000;">
+                <th style="width: 2%;">STT</th>
+                <th style="width: 2%;">Website</th>
+                <th style="width: 10%;">Tên vị trí</th>
+                <th style="width: 31%;">Kích thước (px)</th>
+                <th style="width: 5%;">Nền tảng</th>
+                <th style="width: 9%;">Demo</th>
+                <th style="width: 10%;">Cách tính giá</th>
+                <th style="width: 8%;">Trang chủ</th>
+                <th style="width: 8%;">Roadblock xuyên site<br>(Độc quyền ngày)</th>
+                <th style="width: 8%;">CTR trung bình (%)</th>
+                <th style="width: 3%;">Est. Traffic/ tuần /slot</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" id="stt" placeholder="...">
+                </td>
+                <td>
+                    <!-- Thêm select box để chọn trang web -->
+                    <select id="website">
+                        <!-- Dữ liệu sẽ được tạo bằng JavaScript -->
+                    </select>
+                </td>
+                <td>
+                    <input type="text" id="position" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="dimension" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="platform" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="demo" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="buying_method" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="homepage" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="cross_site" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="ctr" placeholder="...">
+                </td>
+                <td>
+                    <input type="text" id="estTraffic" placeholder="...">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="button" type="submit">Submit</button>
+                </td>
+                <td colspan="9"></td>
+            </tr>
+        </table>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            // Danh sách các trang web và STT tương ứng
+            const websites = [
+                { name: 'Cafef.vn', stt: 1 },
+                { name: 'Cafebiz.vn', stt: 2 },
+                { name: 'nld.com.vn', stt: 3 },
+                { name: 'vtv.vn', stt: 4 },
+                { name: 'Kenh14.vn', stt: 5 },
+                { name: 'Soha.vn', stt: 6 },
+                { name: 'Afamily.vn', stt: 7 },
+                { name: 'HOUSENHOME', stt: 8 },
+                { name: 'PHUNUVIETNAM', stt: 9 },
+                { name: 'Giadinh.suckhoedoisong.vn', stt: 10 },
+                { name: 'Gamek.vn', stt: 11 },
+                { name: 'Autopro.com.vn', stt: 12 },
+                { name: 'Thanhnien.vn', stt: 13 },
+                { name: 'tuoitre.vn', stt: 14 },
+                { name: 'Vneconomy.vn', stt: 15 },
+                { name: 'Toquoc.vn', stt: 16 },
+                { name: 'suckhoedoisong.vn', stt: 17 }
+            ];
+
+            function loadWebsites() {
+                $.ajax({
+                    url: '/add/names',
+                    method: 'GET',
+                    success: function(data) {
+                        $('#website').empty();
+                        $('#website').append(`<option value="" disabled selected>Chọn trang web</option>`);
+                        $.each(data, function(index, item) {
+                            $('#website').append(`<option value="${item.name}">${item.name}</option>`);
+                        });
+                    },
+                    error: function(err) {
+                        console.error('Lỗi khi lấy dữ liệu:', err);
+                    }
+                });
+            }
+
+            $('#website').focus(loadWebsites);
+
+            // Khi chọn một trang web, tự động cập nhật trường STT
+            $('#website').change(function() {
+                const selectedWebsite = $(this).val();
+                const website = websites.find(site => site.name === selectedWebsite);
+                if (website) {
+                    $('#stt').val(website.stt);
+                } else {
+                    $('#stt').val('');
+                }
+            });
+
+            $('#data-form').submit(function(event) {
+                event.preventDefault();
+                const token = localStorage.getItem('accessToken');
+                console.log('Token from localStorage:', token);
+
+                var confirmation = confirm("Bạn có chắc chắn muốn thêm dữ liệu mới?");
+                if (confirmation) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/addvalue',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        data: JSON.stringify({
+                            stt: $('#stt').val(),
+                            website: $('#website').val(),
+                            position: $('#position').val(),
+                            dimension: $('#dimension').val(),
+                            platform: $('#platform').val(),
+                            demo: $('#demo').val(),
+                            buying_method: $('#buying_method').val(),
+                            homePage: $('#homepage').val(),
+                            cross_site: $('#cross_site').val(),
+                            ctr: $('#ctr').val(),
+                            estTraffic: $('#estTraffic').val()
+                        }),
+                        success: function(response) {
+                            alert('Dữ liệu đã được lưu thành công!');
+                            window.location.href = '/admin';
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Đã xảy ra lỗi: ' + error);
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
